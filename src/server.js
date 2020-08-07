@@ -1,9 +1,12 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 import {MongoClient} from 'mongodb';
+import path from 'path';
 const app=express();
 
 app.use(bodyParser.json());
+
+app.use(express.static(path.join(__dirname,'/build')));
 
 const withDB=async (operations,res)=>{
     try {
@@ -61,6 +64,9 @@ app.post('/api/articles/:name/add-comment',async (req,res)=>{
     },res)
 });
 
+app.get('*',(req,res)=>{
+    res.sendFile(path.join(__dirname+'/build/index.html'));
+})
 
 // app.get('/hello',(req,res)=>res.send('Hello'));
 // app.get('/hello/:name',(req,res)=>res.send(`Hello ${req.params.name}`));
